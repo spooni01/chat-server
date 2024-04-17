@@ -7,11 +7,11 @@ This is a chat server application that facilitates communication between clients
 ```./ipk24chat-server {parameters}```
 
 Parameters:<br>
-- **todo**: todo
-- **Server (-s)**: The address or hostname of the chat server.
-- **Port (-p)**: The port number on which the chat server is listening.
-- **Timeout (-d)**: Set the timeout value for communication in milliseconds.
-- **Retransmissions (-r)**: Set the number of retransmissions for lost packets.
+- **l**: server listening IP address for welcome sockets (predefined value is 0.0.0.0).
+- **p**: server listening port for welcome sockets (predefined value is 4567).
+- **d**: UDP confirmation timeout(predefined value is 250).
+- **r**: maximum number of UDP retransmissions(predefined value is 3).
+- **h**: prints program help output and exits.
 
 ## Architecture Overview
 todo
@@ -19,16 +19,16 @@ todo
 ### Client-Server Communication Flow Diagram
 todo
 
+### Class Diagram
+todo
+
 ## Exceptions
 This section describes the exception handling mechanism used in this project. Exceptions are objects thrown by functions to indicate error conditions.
 
 Error codes and what they mean:
-- **0**: there is no error in code (0 is not error code but it is there just for documentation purpose).
-- **10**: error code for invalid argument provided to a function. (in Exceptions/ArgumentException.cpp)
+- **0**: there is no error in code (zero is not error code but it is there just for documentation purpose).
+- **10**: error code for invalid argument provided to a function. (implemented Exceptions/ArgumentException.cpp)
 - **99**: generic error code for unexpected errors.
-
-### Class Diagram
-todo
 
 ## Tests
 todo

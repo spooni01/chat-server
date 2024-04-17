@@ -19,16 +19,10 @@ int main(int argc, char* argv[])
 
 	try {
 
-		// throw ArgumentException("mesagee");
-
-		std::cout << "Number of arguments: " << argc << std::endl;
-
-		for (int i = 0; i < argc; ++i) {
-			std::cout << "Argument " << i+1 << ": " << argv[i] << std::endl;
-		}
+		Arguments args(argc, argv); // Parse arguments
 
 	} catch (const ArgumentException &e) {
-		std::cerr << "Exception caught: " << e.what() << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
 		return 10;
 	}
 

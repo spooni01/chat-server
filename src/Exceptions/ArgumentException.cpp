@@ -7,12 +7,13 @@
 #include <iostream>
 #include <string>
 
+
 /**
  *  @class ArgumentException
  *  This class represents an exception that is thrown when an invalid argument is provided to a program.
  *  It provides an error code and a message to describe the error condition.
  */
-class ArgumentException : public std::exception {
+class ArgumentException : public std::exception{
 private:
 
     /**
