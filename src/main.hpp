@@ -5,3 +5,6 @@
  */
 
 #include <iostream>
+
+// Exceptions
+#include "Exceptions/ArgumentException.cpp"

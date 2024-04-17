@@ -1,7 +1,7 @@
 ################################################################
-# Project: 	Chat server using IPK24-CHAT protocol
-# File: 	Makefile
-# Author: 	Adam Ližičiar xlizic00@stud.fit.vutbr.cz
+#	Project:	Chat server using IPK24-CHAT protocol
+#	File: 		Makefile
+#	Author: 	Adam Ližičiar xlizic00@stud.fit.vutbr.cz
 ################################################################
 
 COMPILER = g++
