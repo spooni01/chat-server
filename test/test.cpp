@@ -2,6 +2,7 @@
 #include "ArgumentsClassTests.cpp"
 #include "ChannelFactoryClassTests.cpp"
 #include "ChannelClassTests.cpp"
+#include "UserClassTests.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

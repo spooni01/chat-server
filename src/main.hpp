@@ -10,6 +10,7 @@
 // Exceptions
 #include "Exceptions/ArgumentException.cpp"
 #include "Exceptions/ChannelException.cpp"
+#include "Exceptions/UserException.cpp"
 
 // ANSI color codes
 #define ANSI_COLOR_GREEN "\033[0;32m"	// help
@@ -20,3 +21,5 @@
 // Include classes
 #include "Classes/Arguments/Arguments.cpp"
 #include "Classes/ChannelFactory/ChannelFactory.cpp"
+#include "Classes/User/User.cpp"
+#include "Classes/UserChannelRelationship/UserChannelRelationship.cpp"

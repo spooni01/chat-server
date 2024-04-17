@@ -13,6 +13,7 @@
  *	@param	argv Parameters.
  *	@return	`0` on success, error code (1 to infinity) on error.
  *	@throws	ArgumentException when problem in a Arguments class
+ *	@throws	ChannelException when problem in a Channel or ChannelFactory class
  */
 int main(int argc, char* argv[])
 {
@@ -27,6 +28,9 @@ int main(int argc, char* argv[])
 	} catch (const ChannelException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
 		return 20;
+	} catch (const UserException &e) {
+		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
+		return 30;
 	}
 
 	return 0;
