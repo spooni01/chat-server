@@ -1,0 +1,15 @@
+.*
+!.gitignore
+
+# Executables
+*.exe
+*.out
+ipk24chat-server
+
+
+# Object files
+*.o
+*.obj
+
+# Folders
+.vscode/
