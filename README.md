@@ -28,11 +28,11 @@ This section describes the exception handling mechanism used in this project. Ex
 Error codes and what they mean:
 - **0**: there is no error in code (zero is not error code but it is there just for documentation purpose).
 - **10**: error code for invalid argument provided to a function. (implemented Exceptions/ArgumentException.cpp)
+- **20**: error code for invalid channel name. (implemented Exceptions/ChannelException.cpp)
 - **99**: generic error code for unexpected errors.
 
 ## Tests
-todo
-
+Unit testing is done using Google Test with separate test files for each class, promoting modularity and focused testing.  This approach simplifies maintenance and improves test organization.
 
 ## License
 This project is licensed under the [GNU General Public License v3.0 (GPL-3.0)](https://www.gnu.org/licenses/gpl-3.0.html). See the [LICENSE](LICENSE) file for details.

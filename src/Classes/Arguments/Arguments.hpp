@@ -1,5 +1,5 @@
 /**
- *	@file	main.hpp
+ *	@file	Classes/Arguments/Arguments.hpp
  *	@brief	Arguments header file
  *	@author	Adam Ližičiar (xlizic00@stud.fit.vutbr.cz)
  */
