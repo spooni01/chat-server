@@ -4,6 +4,9 @@
  *	@author Adam Ližičiar (xlizic00@stud.fit.vutbr.cz)
  */
 
+#ifndef ARGUMENTSEXCEPTION_HPP
+#define ARGUMENTSEXCEPTION_HPP
+
 #include <iostream>
 #include <string>
 
@@ -36,3 +39,5 @@ public:
     const char* what() const noexcept override { return message.c_str(); }
 
 };
+
+#endif // ARGUMENTSEXCEPTION_HPP

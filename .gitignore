@@ -5,7 +5,7 @@
 *.exe
 *.out
 ipk24chat-server
-
+test/test
 
 # Object files
 *.o
@@ -13,3 +13,4 @@ ipk24chat-server
 
 # Folders
 .vscode/
+

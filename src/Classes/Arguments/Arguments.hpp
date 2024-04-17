@@ -7,11 +7,21 @@
 #ifndef ARGUMENTS_HPP
 #define ARGUMENTS_HPP
 
+// Libraries
 #include <iostream>
 #include <cstdlib>
 #include <getopt.h>
 #include <string>
 #include <sstream>
+
+// Exceptions
+#include "../../Exceptions/ArgumentException.cpp"
+
+// ANSI color codes
+#define ANSI_COLOR_GREEN "\033[0;32m"	// help
+#define ANSI_COLOR_ORANGE "\033[0;33m"	// warning
+#define ANSI_COLOR_RED "\033[0;31m"		// error
+#define ANSI_COLOR_RESET "\033[0m"		// reset
 
 
 /**
@@ -82,6 +92,13 @@ public:
 	 *  @return UDP retransmissions.
 	 */
 	uint8_t getRetransmissions() const;
+
+	/**
+	*	@brief	Checks if ipAddress is address of IPv4.
+	*	@param	ipAddress IP address to be checks if it is correct.
+	*	@return true if ipAddress is in correct IPv4 format.
+	*/
+	bool isValidIPv4Format(const std::string& ipAddress);
 
 };
 

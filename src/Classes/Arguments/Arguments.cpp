@@ -12,10 +12,10 @@
  *	@param	argc Number of parameters.
  *	@param	argv Parameters.
  */
-Arguments::Arguments(int argc, char* argv[]) : serverIpAddress("0.0.0.0"), serverPort(4567), timeout(250), retransmissions(3)  {
+Arguments::Arguments(int argc, char* argv[]) : serverIpAddress("0.0.0.0"), serverPort(4567), timeout(250), retransmissions(3)	{
 
 	int option;
-	while ((option = getopt(argc, argv, "ht:s:p:d:r:")) != -1) {
+	while ((option = getopt(argc, argv, "hl:p:d:r:")) != -1) {
 		switch (option) {
 			case 'h':
 				// Help option
@@ -23,11 +23,17 @@ Arguments::Arguments(int argc, char* argv[]) : serverIpAddress("0.0.0.0"), serve
 				exit(0);
 			case 'l':
 				// Server IP
-				this->serverIpAddress = optarg;
+				if (!this->isValidIPv4Format(optarg))
+					throw ArgumentException("Server IP addres is not in IPv4 format.");
+				else
+					this->serverIpAddress = optarg;
 				break;
 			case 'p':
 				// Port option
-				this->serverPort = std::atoi(optarg);
+				if (std::stoi(optarg) > 65535 || std::stoi(optarg) < 0)
+					throw ArgumentException("Port must be beetwen 0 and 65535");
+				else
+					this->serverPort = std::atoi(optarg);
 				break;
 			case 'd':
 				// Timeout option
@@ -59,7 +65,7 @@ void Arguments::printHelp() const {
 
 /**
  *	@brief Returns server IP address.
- *  @return Server IP address.
+ *	@return Server IP address.
  */
 std::string Arguments::getServerIpAddress() const
 {
@@ -71,7 +77,7 @@ std::string Arguments::getServerIpAddress() const
 
 /**
  *	@brief Returns server port.
- *  @return Server port.
+ *	@return Server port.
  */
 uint16_t Arguments::getPort() const
 {
@@ -83,7 +89,7 @@ uint16_t Arguments::getPort() const
 
 /**
  *	@brief Returns UDP confirmation timeout.
- *  @return UDP timeout.
+ *	@return UDP timeout.
  */
 uint16_t Arguments::getTimeout() const
 {
@@ -95,11 +101,50 @@ uint16_t Arguments::getTimeout() const
 
 /**
  *	@brief Returns numbert of UDP retransmissions.
- *  @return UDP retransmissions.
+ *	@return UDP retransmissions.
  */
 uint8_t Arguments::getRetransmissions() const
 {
 
 	return this->retransmissions;
+
+}
+
+
+/**
+ *	@brief	Checks if ipAddress is address of IPv4.
+ *	@param	ipAddress IP address to be checks if it is correct.
+ *	@return true if ipAddress is in correct IPv4 format.
+ */
+bool Arguments::isValidIPv4Format(const std::string& ipAddress)
+{
+	
+	// Split the string by dots
+	std::istringstream ss(ipAddress);
+	std::string token;
+
+	int parts = 0;
+	while (std::getline(ss, token, '.') && parts < 4) {
+		int numValue;
+		// Try converting the token to a number
+		if (std::stringstream(token) >> numValue) {
+			
+			// Check if the value is within range (0-255)
+			if (numValue >= 0 && numValue <= 255)
+				parts++;
+			else
+				return false; 
+			
+		}
+		else {
+			return false; // Non-numeric token
+		}
+	}
+
+	// Check if there is exactly 4 parts
+	if(parts == 4)
+		return true;
+	else
+		return false;
 
 }

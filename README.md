@@ -9,8 +9,8 @@ This is a chat server application that facilitates communication between clients
 Parameters:<br>
 - **l**: server listening IP address for welcome sockets (predefined value is 0.0.0.0).
 - **p**: server listening port for welcome sockets (predefined value is 4567).
-- **d**: UDP confirmation timeout(predefined value is 250).
-- **r**: maximum number of UDP retransmissions(predefined value is 3).
+- **d**: UDP confirmation timeout (predefined value is 250).
+- **r**: maximum number of UDP retransmissions (predefined value is 3).
 - **h**: prints program help output and exits.
 
 ## Architecture Overview
