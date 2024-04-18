@@ -9,7 +9,9 @@
 
 /**
  *  @brief	Constructor for class.
- *	@param	channelID Unique ID of channel.
+ *	@param	username Unique username of user.
+ *	@param	displayname Display name of user.
+ *	@param	secret Secret key of username
  */
 User::User(std::string username, std::string displayname, std::string secret) {
 
@@ -20,6 +22,8 @@ User::User(std::string username, std::string displayname, std::string secret) {
         throw UserException("Secret has wrong syntax.");
     if(!isDisplaynameFormatCorrect(secret))
         throw UserException("Displayname has wrong syntax.");
+
+	// Code to checks secret correction can go here, it is stored in `secret`
 
     // Set variables
     this->username = username;

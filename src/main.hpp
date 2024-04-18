@@ -21,5 +21,5 @@
 // Include classes
 #include "Classes/Arguments/Arguments.cpp"
 #include "Classes/ChannelFactory/ChannelFactory.cpp"
-#include "Classes/User/User.cpp"
+#include "Classes/UserFactory/UserFactory.cpp"
 #include "Classes/UserChannelRelationship/UserChannelRelationship.cpp"

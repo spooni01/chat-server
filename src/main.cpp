@@ -14,6 +14,7 @@
  *	@return	`0` on success, error code (1 to infinity) on error.
  *	@throws	ArgumentException when problem in a Arguments class
  *	@throws	ChannelException when problem in a Channel or ChannelFactory class
+ *	@throws	UserException when problem in a User or UserFactory class
  */
 int main(int argc, char* argv[])
 {
