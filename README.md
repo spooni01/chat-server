@@ -14,7 +14,7 @@ Parameters:<br>
 - **h**: prints program help output and exits.
 
 ## Architecture Overview
-Work with users and channels is created using the Factory pattern designed for object-oriented programming. The ChannelFactory and UserFactory classes contain a list of all current elements and functions for working with users or channels.
+Work with users and channels is created using the Factory pattern designed for object-oriented programming. The ChannelFactory, UserFactory and UserChannelRelationshipFactory classes contain a list of all current elements and functions for working with users, channels or user-channel relationship.
 
 ### Client-Server Communication Flow Diagram
 todo

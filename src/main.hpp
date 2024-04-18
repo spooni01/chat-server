@@ -22,4 +22,4 @@
 #include "Classes/Arguments/Arguments.cpp"
 #include "Classes/ChannelFactory/ChannelFactory.cpp"
 #include "Classes/UserFactory/UserFactory.cpp"
-#include "Classes/UserChannelRelationship/UserChannelRelationship.cpp"
+#include "Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
