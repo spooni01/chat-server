@@ -1,4 +1,4 @@
-#include "../src/Classes/ChannelFactory/ChannelFactory.cpp"
+#include "../../src/Classes/ChannelFactory/ChannelFactory.cpp"
  
 TEST(ChannelFactoryClassTests, AddedNewChannel) { 
 	ChannelFactory channelFactory;

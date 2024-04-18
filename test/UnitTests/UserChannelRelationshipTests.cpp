@@ -1,5 +1,5 @@
 // is included in ChannelFactoryClass.cpp
-// #include "../src/Classes/UserChannelRelationship/UserChannelRelationship.cpp"
+// #include "../../src/Classes/UserChannelRelationship/UserChannelRelationship.cpp"
  
 TEST(UserChannelRelationshipClassTests, CreationOfUserChannelRelationship) { 
 	Channel channel("default");

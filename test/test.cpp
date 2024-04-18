@@ -1,11 +1,12 @@
 #include <gtest/gtest.h>
-#include "ArgumentsClassTests.cpp"
-#include "ChannelFactoryClassTests.cpp"
-#include "ChannelClassTests.cpp"
-#include "UserFactoryClassTests.cpp"
-#include "UserClassTests.cpp"
-#include "UserChannelRelationshipFactoryTests.cpp"
-#include "UserChannelRelationshipTests.cpp"
+#include "UnitTests/ArgumentsClassTests.cpp"
+#include "UnitTests/ChannelFactoryClassTests.cpp"
+#include "UnitTests/ChannelClassTests.cpp"
+#include "UnitTests/UserFactoryClassTests.cpp"
+#include "UnitTests/UserClassTests.cpp"
+#include "UnitTests/UserChannelRelationshipFactoryTests.cpp"
+#include "UnitTests/UserChannelRelationshipTests.cpp"
+#include "UnitTests/FiniteStateMachineClassTests.cpp"
 
 
 int main(int argc, char **argv) {

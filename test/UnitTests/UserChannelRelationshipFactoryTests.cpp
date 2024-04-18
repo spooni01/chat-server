@@ -1,4 +1,4 @@
-#include "../src/Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
+#include "../../src/Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
 
 TEST(UserChannelRelationshipFactoryClassTests, AddedNewRelationship) { 
 	Channel channel1("default");

@@ -1,5 +1,5 @@
 // is included in ChannelFactoryClass.cpp
-// #include "../src/Classes/Channel/Channel.cpp"
+// #include "../../src/Classes/Channel/Channel.cpp"
  
 TEST(ChannelClassTests, CreationOfChannel) { 
 	Channel channel("default");

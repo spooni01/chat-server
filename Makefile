@@ -17,11 +17,11 @@ run: make
 	./$(PROGRAM_NAME)
 
 test: make
-	g++ test/test.cpp -o test/test -lgtest -lgtest_main
-	./test/test
+	g++ test/test.cpp -o test/runTests -lgtest -lgtest_main
+	./test/runTests
 
 clean:
-	rm -f test/test
+	rm -f test/runTests
 	rm -f *.exe *.out *.core *.zip
 	rm -f $(PROGRAM_NAME)
 

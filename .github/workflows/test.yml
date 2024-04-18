@@ -1,7 +1,7 @@
 name: CI - Run Tests
 
 on:
-  push: {} 
+  push: {} # Trigger
   
 jobs:
   test:
@@ -11,7 +11,7 @@ jobs:
       - name: Install dependencies
         run: | 
           sudo apt update
-          sudo apt install -y make  # Install 'make' if needed for your tests
-          sudo apt install libgtest-dev
+          sudo apt install -y make 
+          sudo apt install libgtest-dev # Install gogle tests
       - name: Run Tests
         run: make test  

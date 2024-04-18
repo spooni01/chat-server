@@ -20,8 +20,11 @@ int main(int argc, char* argv[])
 {
 
 	try {
-
+		
 		Arguments arguments(argc, argv); // Parse arguments
+		ChannelFactory channels;		 // Handle operations with channels
+
+		// todo: make udp and tcp poll and wait, write everything on stdout
 
 	} catch (const ArgumentException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;

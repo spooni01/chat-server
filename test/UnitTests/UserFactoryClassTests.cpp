@@ -1,4 +1,4 @@
-#include "../src/Classes/UserFactory/UserFactory.cpp"
+#include "../../src/Classes/UserFactory/UserFactory.cpp"
  
 TEST(UserFactoryClassTests, AddedNewUser) { 
 	UserFactory userFactory;

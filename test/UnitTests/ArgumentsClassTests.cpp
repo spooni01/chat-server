@@ -1,4 +1,4 @@
-#include "../src/Classes/Arguments/Arguments.cpp"
+#include "../../src/Classes/Arguments/Arguments.cpp"
  
 TEST(ArgumentsClassTest, NonDefinedArguments) { 
 	Arguments arguments(1, NULL);

@@ -6,6 +6,13 @@
 
 // Include libraries
 #include <iostream>
+#include <iostream>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <cstring>
+#include <vector>
+#include <poll.h>
 
 // Exceptions
 #include "Exceptions/ArgumentException.cpp"
@@ -20,6 +27,9 @@
 
 // Include classes
 #include "Classes/Arguments/Arguments.cpp"
+#include "Classes/FiniteStateMachine/FiniteStateMachine.cpp"
 #include "Classes/ChannelFactory/ChannelFactory.cpp"
 #include "Classes/UserFactory/UserFactory.cpp"
 #include "Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
+#include "Classes/NetworkHandlers/TCPProtocolHandler/TCPProtocolHandler.cpp"
+#include "Classes/NetworkHandlers/UDPProtocolHandler/UDPProtocolHandler.cpp"

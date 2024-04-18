@@ -1,5 +1,5 @@
 // is included in ChannelFactoryClass.cpp
-// #include "../src/Classes/User/User.cpp"
+// #include "../../src/Classes/User/User.cpp"
  
 TEST(UserClassTest, BasicTest) { 
 	User user("xlizic00", "adam", "secret123");

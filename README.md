@@ -34,6 +34,7 @@ Error codes and what they mean:
 
 ## Tests
 Unit testing is done using Google Test with separate test files for each class, promoting modularity and focused testing.  This approach simplifies maintenance and improves test organization.<br>
+In tests there is also class ClientClass that simulates client.<br>
 Test can be run using the `make test` command.
 
 ## License
