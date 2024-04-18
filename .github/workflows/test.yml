@@ -1,0 +1,16 @@
+name: CI - Run Tests
+
+on:
+  push: {} 
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 
+      - name: Install dependencies
+        run: | 
+          sudo apt update
+          sudo apt install -y make  # Install 'make' if needed for your tests
+      - name: Run Tests
+        run: make test  
