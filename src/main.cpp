@@ -21,10 +21,15 @@ int main(int argc, char* argv[])
 
 	try {
 		
-		Arguments arguments(argc, argv); // Parse arguments
-		ChannelFactory channels;		 // Handle operations with channels
+		// Set variables
+		Arguments arguments(argc, argv); 				// Parse arguments.
+		ChannelFactory channels;		 				// Handle operations with channels.
+		UserFactory users;								// Handle operations with users.
+		UserChannelRelationshipFactory relationships;	// Handle relationships beetwen user and channel (which user is in which channel).
+		TCPProtocolHandler tcp(arguments.getServerIpAddress(), arguments.getPort());	// Incoming TCP communication handler
 
-		// todo: make udp and tcp poll and wait, write everything on stdout
+		// Listen for sockets and handle it inside functions
+		tcp.listenForSockets(&users);
 
 	} catch (const ArgumentException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
@@ -35,6 +40,9 @@ int main(int argc, char* argv[])
 	} catch (const UserException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
 		return 30;
+	} catch (const NetworkException &e) {
+		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
+		return 40;
 	}
 
 	return 0;

@@ -13,11 +13,13 @@
 #include <cstring>
 #include <vector>
 #include <poll.h>
+#include <csignal>
 
 // Exceptions
 #include "Exceptions/ArgumentException.cpp"
 #include "Exceptions/ChannelException.cpp"
 #include "Exceptions/UserException.cpp"
+#include "Exceptions/NetworkException.cpp"
 
 // ANSI color codes
 #define ANSI_COLOR_GREEN "\033[0;32m"	// help

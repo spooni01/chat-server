@@ -18,12 +18,12 @@ User::User(std::string username, std::string displayname, std::string secret) {
     // Checks
     if(!isUsernameFormatCorrect(username))
         throw UserException("Username has wrong syntax.");
-    if(!isSecretFormatCorrect(displayname))
+    if(!isSecretFormatCorrect(secret))
         throw UserException("Secret has wrong syntax.");
-    if(!isDisplaynameFormatCorrect(secret))
+    if(!isDisplaynameFormatCorrect(displayname))
         throw UserException("Displayname has wrong syntax.");
 
-	// Code to checks secret correction can go here, it is stored in `secret`
+	// Code to checks secret correction can go in this place
 
     // Set variables
     this->username = username;

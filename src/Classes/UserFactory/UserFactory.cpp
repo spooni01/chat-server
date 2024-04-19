@@ -72,3 +72,26 @@ User* UserFactory::findUser(std::string username) {
     	return nullptr;
 
 }
+
+
+/**
+ *  @brief  Counts the number of users in listOfUsers.
+ *  @return The number of users.
+ */
+int UserFactory::getNumberOfUsers() {
+
+	return this->listOfUsers.size();
+
+}
+
+
+/**
+ *  @brief  Removes all users from listOfUsers.
+ *
+ *	Used in tests.
+ */
+void UserFactory::removeAllUsers() {
+
+	this->listOfUsers.clear();
+
+}

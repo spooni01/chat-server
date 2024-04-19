@@ -1,4 +1,7 @@
 #include <gtest/gtest.h>
+#include <chrono>
+#include <thread>
+#include "ClientSimulator/TCPClientSimulator.cpp"
 #include "UnitTests/ArgumentsClassTests.cpp"
 #include "UnitTests/ChannelFactoryClassTests.cpp"
 #include "UnitTests/ChannelClassTests.cpp"
@@ -7,6 +10,7 @@
 #include "UnitTests/UserChannelRelationshipFactoryTests.cpp"
 #include "UnitTests/UserChannelRelationshipTests.cpp"
 #include "UnitTests/FiniteStateMachineClassTests.cpp"
+#include "UnitTests/TCPProtocolHandlerClassTests.cpp"
 
 
 int main(int argc, char **argv) {

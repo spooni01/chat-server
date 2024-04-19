@@ -32,38 +32,52 @@ private:
 	/**
 	 *  @brief	List of current channels.
 	 */
-    std::vector<User> listOfUsers;
+	std::vector<User> listOfUsers;
 
 public:
 
 
-    /**
+	/**
  	 *  @brief	Add user to listOfUsers.
-     *	@param	username Unique username of user.
-     *	@param	displayname Display name of user.
-     *	@param	secret Secret key of username.
-    */
+	 *	@param	username Unique username of user.
+	 *	@param	displayname Display name of user.
+	 *	@param	secret Secret key of username.
+	*/
 	void addNewUser(std::string username, std::string displayname, std::string secret);
 
-    /**
+	/**
  	 *  @brief	Remove channel from listOfUsers
-     *  @param  username Unique username of user to remove.
-     */
+	 *  @param  username Unique username of user to remove.
+	 */
 	void removeUser(std::string username);
 
-    /**
-     *  @brief	Checks if user exists.
-     *  @param  username Unique username to check.
-     *  @return true when user exists.
-     */
-    bool userExists(std::string username);
+	/**
+	 *  @brief	Checks if user exists.
+	 *  @param  username Unique username to check.
+	 *  @return true when user exists.
+	 */
+	bool userExists(std::string username);
 
-    /**
-     *  @brief	Find user in listOfUsers.
-     *  @param  username Unique username of user to find.
-     *  @return pointer on user.
-     */
-    User* findUser(std::string username);
+	/**
+	 *  @brief	Find user in listOfUsers.
+	 *  @param  username Unique username of user to find.
+	 *  @return pointer on user.
+	 */
+	User* findUser(std::string username);
+
+
+	/**
+	*  @brief  Counts the number of users in listOfUsers.
+	*  @return The number of users.
+	*/
+	int getNumberOfUsers();
+
+	/**
+	 *  @brief  Removes all users from listOfUsers.
+	 *
+	 *	Used in tests.
+	 */
+	void removeAllUsers();
 
 };
 

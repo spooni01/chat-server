@@ -12,4 +12,5 @@ test/runTests
 
 # Folders
 .vscode/
+src/Classes/NetworkHandlers/UDPProtocolHandler/
 

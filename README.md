@@ -30,6 +30,7 @@ Error codes and what they mean:
 - **10**: error code for invalid argument provided to a function. (implemented Exceptions/ArgumentException.cpp)
 - **20**: error code for invalid channel name. (implemented Exceptions/ChannelException.cpp)
 - **30**: error code for user problems. (implemented Exceptions/UserException.cpp)
+- **40**: error code for network problems. (implemented Exceptions/NetworkException.cpp)
 - **99**: generic error code for unexpected errors.
 
 ## Tests
