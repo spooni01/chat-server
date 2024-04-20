@@ -195,13 +195,20 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, int breakPoint = -
 				continue;
 			}
 
-			// Write received data to stdout
+
+			/**
+			 * PROCESS RECEIVED DATA
+			 */ 
 			std::string receivedData(buffer, bytesReceived);
   			receivedData.erase(std::remove(receivedData.begin(), receivedData.end(), '\n'), receivedData.end());
   			users->addNewUser("adam", "xlicxz", "secret");
+			// todo... 1) send back packet, 2) save it to user, make just authorization first (use class Message and then class ClientRequestProcessor). Then add all other opperations
+			// do not forget use FiniteStateMachine
+			//std::cout << receivedData << std::endl;
 			close(clientSocket);
 
-			// For development and tests
+
+			// For development and tests (to know on how much sockets wait)
 			if(breakPoint != -1) {
 				if(breakPoint == 1) {
 					return true;

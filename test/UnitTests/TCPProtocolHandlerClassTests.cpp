@@ -3,16 +3,13 @@
 UserFactory users;
 TCPProtocolHandler tcp("0.0.0.0", 4567);
 TCPClientSimulator client("0.0.0.0", 4567);
+TCPClientSimulator client2("0.0.0.0", 4567);
+TCPClientSimulator client3("0.0.0.0", 4567);
 
 
 void listenThread_1() {
   tcp.listenForSockets(&users, 1);
 }
-void listenThread_2() {
-  tcp.listenForSockets(&users, 2);
-}
-
-
 TEST(TCPProtocolHandlerClassTests, BasicOneUserAuth) { 
     users.removeAllUsers();
 
@@ -30,10 +27,17 @@ TEST(TCPProtocolHandlerClassTests, BasicOneUserAuth) {
 
 
     EXPECT_EQ(users.getNumberOfUsers(), 1);
+
+    // End connection
+    //client.sendmsg("BYE");
+    //EXPECT_EQ(users.getNumberOfUsers(), 0);
 }
 
 
-TEST(TCPProtocolHandlerClassTests, BasicTwoUsersAuth) { 
+void listenThread_2() {
+  tcp.listenForSockets(&users, 3);
+}
+TEST(TCPProtocolHandlerClassTests, AuthorizationToServerFromMoreClients) { 
     users.removeAllUsers();
 
     // Go to thread
@@ -44,12 +48,18 @@ TEST(TCPProtocolHandlerClassTests, BasicTwoUsersAuth) {
     
     // Send client
     client.sendmsg("AUTH xlizic00 AS adam USING secret123");
-    client.sendmsg("AUTH xlogin00 AS login USING 123secret");
+    client2.sendmsg("AUTH xlogin00 AS login USING 123secret");
+    client3.sendmsg("AUTH xyz AS xyz USING xyz");
 
     // Join
     listenThreadObj.join();
 
 
-    EXPECT_EQ(users.getNumberOfUsers(), 2);
-}
+    EXPECT_EQ(users.getNumberOfUsers(), 3);
 
+    // End connection
+    //client.sendmsg("BYE");
+    //client2.sendmsg("BYE");
+    //client3.sendmsg("BYE");
+    //EXPECT_EQ(users.getNumberOfUsers(), 0);
+}

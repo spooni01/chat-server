@@ -11,6 +11,7 @@
 #include "UnitTests/UserChannelRelationshipTests.cpp"
 #include "UnitTests/FiniteStateMachineClassTests.cpp"
 #include "UnitTests/TCPProtocolHandlerClassTests.cpp"
+#include "UnitTests/MessageClassTests.cpp"
 
 
 int main(int argc, char **argv) {
