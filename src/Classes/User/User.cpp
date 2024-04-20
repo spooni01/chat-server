@@ -13,7 +13,7 @@
  *	@param	displayname Display name of user.
  *	@param	secret Secret key of username
  */
-User::User(std::string username, std::string displayname, std::string secret) {
+User::User(std::string username, std::string displayname, std::string secret, int uniqueID) {
 
     // Checks
     if(!isUsernameFormatCorrect(username))
@@ -28,6 +28,8 @@ User::User(std::string username, std::string displayname, std::string secret) {
     // Set variables
     this->username = username;
     this->displayname = displayname;
+	this->uniqueID = uniqueID;
+	this->state.transitionToAccept();
 
 }
 
@@ -110,7 +112,10 @@ bool User::isDisplaynameFormatCorrect(const std::string& displayname) {
  */
 std::string User::getUsername() const {
 
-    return this->username;
+	if(!this->username.empty()) 
+    	return this->username;
+	else
+		return "";
 
 }
 
@@ -124,4 +129,16 @@ std::string User::getDisplayname() const {
     return this->displayname;
 
 }
+
+
+/**
+ *  @brief	Returns unique ID. It is used for communication.
+ *  @return unique ID.
+ */
+int User::getUniqueID() const {
+
+    return this->uniqueID;
+
+}
+
 

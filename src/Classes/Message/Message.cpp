@@ -98,7 +98,6 @@ void Message::parseTCP(const std::string& message) {
             startPos = endPos + 4; // Skip " AS "
             this->displayName = message.substr(startPos);
             break;
-            break;
         }
         case MessageType::MSG: {
             size_t startPos = 9; // Skip "MSG FROM "
@@ -111,7 +110,6 @@ void Message::parseTCP(const std::string& message) {
 
             startPos = endPos + 4; // Skip " IS "
             this->messageContent = message.substr(startPos);
-            break;
             break;
         }
         case MessageType::BYE:

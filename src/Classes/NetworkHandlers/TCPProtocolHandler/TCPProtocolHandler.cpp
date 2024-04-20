@@ -47,8 +47,8 @@ TCPProtocolHandler::~TCPProtocolHandler() {
  */
 void TCPProtocolHandler::cleanupOnExit() {
 
-    std::cout << "TCPProtocolHandler cleaning up..." << std::endl;
-    if (this->socketDescriptor_ != -1) {
+	std::cout << "TCPProtocolHandler cleaning up..." << std::endl;
+	if (this->socketDescriptor_ != -1) {
 		close(this->socketDescriptor_);
 	}
 
@@ -139,89 +139,138 @@ bool TCPProtocolHandler::bindSocketToTheAddress() {
  *	@param breakPoint number of packet to receive. If it is -1, receive all infinitely.
  *	@return true on successful setup, false otherwise.
  */
-bool TCPProtocolHandler::listenForSockets(UserFactory *users, int breakPoint = -1) {
+bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelationshipFactory *relationship, ChannelFactory *channels, int breakPoint = -1) {
 
 	// Listen for incoming connections
-	if (listen(this->socketDescriptor_, 1) < 0) {
-		std::cerr << ANSI_COLOR_RED << "Error listening for connections: " << strerror(errno) << ANSI_COLOR_RESET << std::endl;
-		close(this->socketDescriptor_);
-		this->socketDescriptor_ = -1;
-		throw NetworkException("Network problem.");
-		return false;
+	if (listen(socketDescriptor_, 1) < 0) {
+	  std::cerr << "Error listening for connections: " << strerror(errno) << std::endl;
+	  close(socketDescriptor_);
+	  socketDescriptor_ = -1;
+	  throw NetworkException("Network problem.");
+	  return false;
 	}
 
-	// Prepare poll structure
-	struct pollfd pfd;
-	pfd.fd = this->socketDescriptor_;
-	pfd.events = POLLIN; // Interested in readability
+	// Prepare poll structure (assuming all existing connections are added initially)
+	std::vector<pollfd> fds;
+	pollfd listen_fd;
+	listen_fd.fd = socketDescriptor_;
+	listen_fd.events = POLLIN; // Interested in readability
+	fds.push_back(listen_fd);
+
+	std::map<int, int> connectedClients; // Map client ID to socket descriptor
+	int clientId = 0; // Generate unique client ID
 
 	while (true) {
-		// Wait for incoming data with poll
-		int pollResult = poll(&pfd, 1, -1); // Wait indefinitely
-		if (pollResult == -1) {
-			std::cerr << ANSI_COLOR_RED << "Error in poll: " << strerror(errno) << ANSI_COLOR_RESET << std::endl;
-			throw NetworkException("Network problem.");
+	  int pollResult = poll(fds.data(), fds.size(), -1);
+	  if (pollResult == -1) {
+		std::cerr << "Error in poll: " << strerror(errno) << std::endl;
+		throw NetworkException("Network problem.");
+		break;
+	  } else if (pollResult == 0) {
+		// Timeout (unlikely with -1 in timeout)
+		continue;
+	  }
 
-			break;
-		}
-		else if (pollResult == 0) {
-			// Timeout (unlikely with -1 in timeout)
-			continue;
-		}
-
-		// Check for readable socket
-		if (pfd.revents & POLLIN) {
-			// Accept connection (not strictly necessary here, but included for completeness)
+	  // Check for events on existing connections and listening socket
+	  for (size_t i = 0; i < fds.size(); ++i) {
+		if (fds[i].revents & POLLIN) {
+		  if (fds[i].fd == socketDescriptor_) {
+			// New connection
 			struct sockaddr_storage clientAddr;
 			socklen_t clientAddrSize = sizeof(clientAddr);
-			int clientSocket = accept(this->socketDescriptor_, (struct sockaddr*)&clientAddr, &clientAddrSize);
+			int clientSocket = accept(socketDescriptor_, (struct sockaddr*)&clientAddr, &clientAddrSize);
 			if (clientSocket == -1) {
-				std::cerr << ANSI_COLOR_RED << "Error accepting connection: " << strerror(errno) << ANSI_COLOR_RESET << std::endl;
-				throw NetworkException("Network problem.");
-				continue;
+			  std::cerr << "Error accepting connection: " << strerror(errno) << std::endl;
+			  throw NetworkException("Network problem.");
+			  continue;
 			}
-
-			// Receive data from the client
+			// Add new client to map and poll structure
+			connectedClients[++clientId] = clientSocket;
+			fds.push_back({clientSocket, POLLIN, 0});
+		  } else {
+			// Existing connection has data
+			int clientSocket = fds[i].fd;
 			char buffer[1024];
 			memset(buffer, 0, sizeof(buffer));
 			ssize_t bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
 			if (bytesReceived == -1) {
-				std::cerr << ANSI_COLOR_RED << "Error receiving data: " << strerror(errno) << ANSI_COLOR_RESET << std::endl;
-				close(clientSocket);
-				throw NetworkException("Network problem.");
-				continue;
+			  std::cerr << "Error receiving data: " << strerror(errno) << std::endl;
+			  close(clientSocket);
+			  connectedClients.erase(clientSocket);
+			  fds.erase(fds.begin() + i); // Remove from poll structure
+			  continue;
 			} else if (bytesReceived == 0) {
-				close(clientSocket);
-				continue;
+			  close(clientSocket);
+			  connectedClients.erase(clientSocket);
+			  fds.erase(fds.begin() + i); // Remove from poll structure
+			  continue;
 			}
-
 
 			/**
 			 * PROCESS RECEIVED DATA
-			 */ 
+			 */
 			std::string receivedData(buffer, bytesReceived);
-  			receivedData.erase(std::remove(receivedData.begin(), receivedData.end(), '\n'), receivedData.end());
-  			users->addNewUser("adam", "xlicxz", "secret");
-			// todo... 1) send back packet, 2) save it to user, make just authorization first (use class Message and then class ClientRequestProcessor). Then add all other opperations
-			// do not forget use FiniteStateMachine
-			//std::cout << receivedData << std::endl;
-			close(clientSocket);
+			receivedData.erase(std::remove(receivedData.begin(), receivedData.end(), '\n'), receivedData.end());
 
-
-			// For development and tests (to know on how much sockets wait)
-			if(breakPoint != -1) {
-				if(breakPoint == 1) {
-					return true;
-				}
-				else {
-					breakPoint = breakPoint - 1;
+			// Get current client
+			// Find the client ID for this socket
+			int currentClientID = -1;
+			for (const auto& client : connectedClients) {
+				if (client.second == fds[i].fd) {
+					currentClientID = client.first;
+					break;
 				}
 			}
+			
+			// Parse message
+			Message msg;
+			msg.parseTCP(receivedData);
+			if(msg.getMessageType() == Message::MessageType::JOIN && users->userExistsByUniqueID(currentClientID)) {
+				users->findUserByUniqueID(currentClientID)->displayname = msg.getDisplayName();
+			}
+
+			// Check if user is first time
+			// todo
+
+			// Process what user wants
+			ClientRequestProcessor requestProcessor(&msg, users, currentClientID, relationship, channels);
+
+			/**
+			 *  RESPONSE
+			 */
+			std::string responseMessage;
+			responseMessage = requestProcessor.getMessageTCP();
+			responseMessage += "\r\n";
+
+			// Prepare and send response message
+			if (!responseMessage.empty()) {
+			  int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
+			  if (bytesSent == -1) {
+				std::cerr << "Error sending data: " << strerror(errno) << std::endl;
+			  }
+			}
+
+			if (msg.getMessageType() == Message::MessageType::BYE) {
+			  connectedClients.erase(clientSocket);
+			  close(clientSocket);
+			  fds.erase(fds.begin() + i); // Remove from poll structure
+ 			}
+		  }
 		}
+	  }
+
+	  // For development and tests (to know on how much sockets wait)
+	  if(breakPoint != -1) {
+		if(breakPoint == 1) {
+		  return true;
+		}
+		else {
+		  breakPoint = breakPoint - 1;
+		}
+	  }
 	}
 
 	// Close the listening socket (important on program termination)
-	close(this->socketDescriptor_);
+	close(socketDescriptor_);
 	return true;
-
 }

@@ -1,5 +1,7 @@
+#include "../../src/Classes/Message/Message.hpp"
+#include "../../src/Classes/ClientRequestProcessor/ClientRequestProcessor.cpp"
 #include "../../src/Classes/NetworkHandlers/TCPProtocolHandler/TCPProtocolHandler.cpp"
- 
+
 UserFactory users;
 TCPProtocolHandler tcp("0.0.0.0", 4567);
 TCPClientSimulator client("0.0.0.0", 4567);
@@ -26,11 +28,17 @@ TEST(TCPProtocolHandlerClassTests, BasicOneUserAuth) {
     listenThreadObj.join();
 
 
+    //client.receivePacket();
+    //std::cout << client.getReceivedData() << std::endl;
+
+
     EXPECT_EQ(users.getNumberOfUsers(), 1);
 
     // End connection
     //client.sendmsg("BYE");
     //EXPECT_EQ(users.getNumberOfUsers(), 0);
+
+    ///client.closeConnection();
 }
 
 
@@ -59,7 +67,9 @@ TEST(TCPProtocolHandlerClassTests, AuthorizationToServerFromMoreClients) {
 
     // End connection
     //client.sendmsg("BYE");
+    //EXPECT_EQ(users.getNumberOfUsers(), 2);
     //client2.sendmsg("BYE");
+    //EXPECT_EQ(users.getNumberOfUsers(), 1);
     //client3.sendmsg("BYE");
     //EXPECT_EQ(users.getNumberOfUsers(), 0);
 }

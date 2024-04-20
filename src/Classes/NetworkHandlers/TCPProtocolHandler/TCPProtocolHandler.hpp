@@ -19,6 +19,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <poll.h>
+#include <map>
+#include "../../ClientRequestProcessor/ClientRequestProcessor.hpp"
 #include "../../UserFactory/UserFactory.hpp"
 
 // Exceptions
@@ -142,7 +144,7 @@ public:
 	*	@param breakPoint number of packet to receive. If it is -1, receive all infinitely.
 	*	@return true on successful setup, false otherwise.
 	*/
-	bool listenForSockets(UserFactory *users, int breakPoint);
+	bool listenForSockets(UserFactory *users, UserChannelRelationshipFactory *relationship, ChannelFactory *channels, int breakPoint);
 
 };
 

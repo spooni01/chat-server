@@ -35,13 +35,14 @@ void ChannelFactory::addNewChannel(std::string newChannelID) {
  */
 void ChannelFactory::removeChannel(std::string channelId) {
 
-	listOfChannels.erase(
-		std::remove_if(this->listOfChannels.begin(), this->listOfChannels.end(),
-		[channelId](const Channel& channel) {
-			return channel.getChannelID() == channelId;
-		}),
-		this->listOfChannels.end());
-
+	if(channelId != "default") {
+		listOfChannels.erase(
+			std::remove_if(this->listOfChannels.begin(), this->listOfChannels.end(),
+			[channelId](const Channel& channel) {
+				return channel.getChannelID() == channelId;
+			}),
+			this->listOfChannels.end());
+	}
 }
 
 

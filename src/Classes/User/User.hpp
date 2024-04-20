@@ -12,6 +12,7 @@
 
 // Exceptions
 #include "../../Exceptions/UserException.cpp"
+#include "../FiniteStateMachine/FiniteStateMachine.hpp"
 
 // ANSI color codes
 #define ANSI_COLOR_GREEN "\033[0;32m"	// help
@@ -33,17 +34,27 @@ private:
 	std::string username;
 
 	/**
+	 *  @brief	Get unique ID.
+	 */
+	int uniqueID;
+
+public:
+
+	/**
 	 *  @brief	Display name of user.
 	 */
 	std::string displayname;
 
-public:
+	/**
+	 *  @brief	State of user
+	 */
+	FiniteStateMachine state;
 
 	/**
 	 *  @brief	Constructor for class.
 	 *	@param	channelID Unique ID of channel.
 	 */
-	User(std::string username, std::string displayname, std::string secret);
+	User(std::string username, std::string displayname, std::string secret, int uniqueID = -1);
 
 	/**
 	*	@brief	Checks if username is correct.
@@ -79,6 +90,12 @@ public:
 	 *  @return display name.
 	 */
 	std::string getDisplayname() const;
+
+	/**
+	 *  @brief	Returns unique ID. It is used for communication.
+	 *  @return unique ID.
+	 */
+	int getUniqueID() const;
 
 };
 

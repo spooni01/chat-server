@@ -15,9 +15,9 @@
  *	@param	displayname Display name of user.
  *	@param	secret Secret key of username.
 */
-void UserFactory::addNewUser(std::string username, std::string displayname, std::string secret) {
+void UserFactory::addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID) {
 
-	User tmp(username, displayname, secret);
+	User tmp(username, displayname, secret, currentClientID);
 	this->listOfUsers.push_back(tmp);
 
 }
@@ -55,6 +55,22 @@ bool UserFactory::userExists(std::string username) {
 
 
 /**
+ *  @brief	Checks if user exists.
+ *  @param  username Unique username to check.
+ *  @return true when user exists.
+ */
+bool UserFactory::userExistsByUniqueID(int uniqueID) {
+
+	return std::any_of(listOfUsers.begin(), listOfUsers.end(),
+		[uniqueID](const User& user) {
+			return user.getUniqueID() == uniqueID;
+		});
+
+}
+
+
+
+/**
  *  @brief	Find user in listOfUsers.
  *  @param  username Unique username of user to find.
  *  @return pointer on user.
@@ -64,6 +80,26 @@ User* UserFactory::findUser(std::string username) {
   	auto foundUser = std::find_if(listOfUsers.begin(), listOfUsers.end(),
     	[username](const User& user) {
         	return user.getUsername() == username;
+    });
+
+  	if (foundUser != listOfUsers.end()) 
+    	return &(*foundUser);
+	else 
+    	return nullptr;
+
+}
+
+
+/**
+ *  @brief	Find user  by unique id in listOfUsers.
+ *  @param  username Unique username of user to find.
+ *  @return pointer on user.
+ */
+User* UserFactory::findUserByUniqueID(int uniqueID) {
+
+  	auto foundUser = std::find_if(listOfUsers.begin(), listOfUsers.end(),
+    	[uniqueID](const User& user) {
+        	return user.getUniqueID() == uniqueID;
     });
 
   	if (foundUser != listOfUsers.end()) 

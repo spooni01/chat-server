@@ -33,6 +33,7 @@
 #include "Classes/ChannelFactory/ChannelFactory.cpp"
 #include "Classes/UserFactory/UserFactory.cpp"
 #include "Classes/Message/Message.cpp"
+#include "Classes/ClientRequestProcessor/ClientRequestProcessor.cpp"
 #include "Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
 #include "Classes/NetworkHandlers/TCPProtocolHandler/TCPProtocolHandler.cpp"
 #include "Classes/NetworkHandlers/UDPProtocolHandler/UDPProtocolHandler.cpp"

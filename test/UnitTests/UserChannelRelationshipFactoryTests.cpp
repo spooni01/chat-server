@@ -2,10 +2,10 @@
 
 TEST(UserChannelRelationshipFactoryClassTests, AddedNewRelationship) { 
 	Channel channel1("default");
-    User user1("xlizic00", "adam", "secret123");
-    Channel channel2("general");
-    User user2("xlogin00", "fitak", "12456789");
-    UserChannelRelationshipFactory relationshipFactory;
+  User user1("xlizic00", "adam", "secret123");
+  Channel channel2("general");
+  User user2("xlogin00", "fitak", "12456789");
+  UserChannelRelationshipFactory relationshipFactory;
 
 	EXPECT_NO_THROW(relationshipFactory.addNewRelationship(&user1, &channel1));
 	EXPECT_NO_THROW(relationshipFactory.addNewRelationship(&user2, &channel2));

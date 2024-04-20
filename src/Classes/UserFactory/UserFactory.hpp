@@ -43,7 +43,7 @@ public:
 	 *	@param	displayname Display name of user.
 	 *	@param	secret Secret key of username.
 	*/
-	void addNewUser(std::string username, std::string displayname, std::string secret);
+	void addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID);
 
 	/**
  	 *  @brief	Remove channel from listOfUsers
@@ -58,12 +58,26 @@ public:
 	 */
 	bool userExists(std::string username);
 
+	/*  @brief	Checks if user exists.
+	 *  @param  username Unique username to check.
+	 *  @return true when user exists.
+	 */
+	bool userExistsByUniqueID(int uniqueID);
+
 	/**
 	 *  @brief	Find user in listOfUsers.
 	 *  @param  username Unique username of user to find.
 	 *  @return pointer on user.
 	 */
 	User* findUser(std::string username);
+
+
+	/**
+	*  @brief	Find user  by unique id in listOfUsers.
+	*  @param  username Unique username of user to find.
+	*  @return pointer on user.
+	*/
+	User* findUserByUniqueID(int uniqueID);
 
 
 	/**

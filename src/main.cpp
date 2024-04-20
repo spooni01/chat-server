@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 		TCPProtocolHandler tcp(arguments.getServerIpAddress(), arguments.getPort());	// Incoming TCP communication handler
 
 		// Listen for sockets and handle it inside functions
-		tcp.listenForSockets(&users);
+		tcp.listenForSockets(&users, &relationships, &channels);
 
 	} catch (const ArgumentException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
