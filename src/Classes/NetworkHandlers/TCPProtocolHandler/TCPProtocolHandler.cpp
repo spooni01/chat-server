@@ -180,30 +180,30 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 			socklen_t clientAddrSize = sizeof(clientAddr);
 			int clientSocket = accept(socketDescriptor_, (struct sockaddr*)&clientAddr, &clientAddrSize);
 			if (clientSocket == -1) {
-			  std::cerr << "Error accepting connection: " << strerror(errno) << std::endl;
-			  throw NetworkException("Network problem.");
-			  continue;
+				std::cerr << "Error accepting connection: " << strerror(errno) << std::endl;
+				throw NetworkException("Network problem.");
+				continue;
 			}
 			// Add new client to map and poll structure
 			connectedClients[++clientId] = clientSocket;
 			fds.push_back({clientSocket, POLLIN, 0});
-		  } else {
+			} else {
 			// Existing connection has data
 			int clientSocket = fds[i].fd;
 			char buffer[1024];
 			memset(buffer, 0, sizeof(buffer));
 			ssize_t bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
 			if (bytesReceived == -1) {
-			  std::cerr << "Error receiving data: " << strerror(errno) << std::endl;
-			  close(clientSocket);
-			  connectedClients.erase(clientSocket);
-			  fds.erase(fds.begin() + i); // Remove from poll structure
-			  continue;
+				std::cerr << "Error receiving data: " << strerror(errno) << std::endl;
+				close(clientSocket);
+				connectedClients.erase(clientSocket);
+				fds.erase(fds.begin() + i); // Remove from poll structure
+				continue;
 			} else if (bytesReceived == 0) {
-			  close(clientSocket);
-			  connectedClients.erase(clientSocket);
-			  fds.erase(fds.begin() + i); // Remove from poll structure
-			  continue;
+				close(clientSocket);
+				connectedClients.erase(clientSocket);
+				fds.erase(fds.begin() + i); // Remove from poll structure
+				continue;
 			}
 
 			/**
@@ -229,25 +229,39 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 				users->findUserByUniqueID(currentClientID)->displayname = msg.getDisplayName();
 			}
 
-			// Check if user is first time
-			// todo
-
 			// Process what user wants
 			ClientRequestProcessor requestProcessor(&msg, users, currentClientID, relationship, channels);
 
 			/**
-			 *  RESPONSE
+			 *	RESPONSE
 			 */
 			std::string responseMessage;
 			responseMessage = requestProcessor.getMessageTCP();
 			responseMessage += "\r\n";
 
+			// Broadcast
+			if (msg.getMessageType() == Message::MessageType::MSG || msg.getMessageType() == Message::MessageType::JOIN) {
+		
+				// Iterate through all connected clients
+				for (const auto& client : connectedClients) {
+					// Send broadcast message only to clients with ID 1 and 2
+					// todo send just to people who are in the same channel
+					if (client.first == 1 || client.first == 2) {
+						int broadcastSocket = client.second;
+						int bytesSent = send(broadcastSocket, responseMessage.c_str(), responseMessage.length(), 0);
+						if (bytesSent == -1) {
+							std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
+						}
+					}
+				}
+			}
+
 			// Prepare and send response message
-			if (!responseMessage.empty()) {
-			  int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
-			  if (bytesSent == -1) {
+			if (!responseMessage.empty() && msg.getMessageType() != Message::MessageType::MSG) {
+				int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
+				if (bytesSent == -1) {
 				std::cerr << "Error sending data: " << strerror(errno) << std::endl;
-			  }
+				}
 			}
 
 			if (msg.getMessageType() == Message::MessageType::BYE) {

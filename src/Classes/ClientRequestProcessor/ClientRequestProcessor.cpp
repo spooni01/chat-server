@@ -40,7 +40,18 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
             this->messageTCP += users->findUserByUniqueID(currentClientID)->getDisplayname();
             this->messageTCP += " joined ";
             this->messageTCP += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+            this->messageTCP += ".";
         }
+    }
+
+    // JOIN
+    else if(message->getMessageType() == Message::MessageType::MSG && users->userExistsByUniqueID(currentClientID)) {
+        
+        // Send
+        this->messageTCP = "MSG FROM ";
+        this->messageTCP += users->findUserByUniqueID(currentClientID)->getDisplayname();
+        this->messageTCP = " IS ";
+        this->messageTCP += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
     }
 
     // BYE
