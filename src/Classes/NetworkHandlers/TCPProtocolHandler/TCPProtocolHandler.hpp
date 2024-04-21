@@ -22,6 +22,8 @@
 #include <map>
 #include "../../ClientRequestProcessor/ClientRequestProcessor.hpp"
 #include "../../UserFactory/UserFactory.hpp"
+#include "../../User/User.hpp"
+
 
 // Exceptions
 #include "../../../Exceptions/NetworkException.cpp"

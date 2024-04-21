@@ -63,7 +63,7 @@ public:
  	 *  @brief	Get pointer to user.
      *  @return Pointer to user.
      */
-	User* getUser();
+	User* getUser() const;
 
 };
 

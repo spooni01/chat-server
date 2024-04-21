@@ -45,7 +45,7 @@ Channel* UserChannelRelationship::getChannel() {
  *  @brief	Get user by channel.
  *  @return Pointer to user.
  */
-User* UserChannelRelationship::getUser() {
+User* UserChannelRelationship::getUser() const {
 
     return this->user;
 

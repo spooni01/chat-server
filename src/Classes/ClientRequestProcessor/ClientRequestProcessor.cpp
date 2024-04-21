@@ -20,6 +20,7 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
             users->findUserByUniqueID(currentClientID)->state.transitionToOpen();
             relationship->addNewRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel("default"));
             this->messageTCP = "REPLY OK IS Auth success.";
+
         }
     }
 
@@ -35,7 +36,7 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
             // Make new relationship
             relationship->addNewRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel(message->getChannelID()));
 
-            // Send
+            // SendfindChannel
             this->messageTCP = "MSG FROM Server IS ";
             this->messageTCP += users->findUserByUniqueID(currentClientID)->getDisplayname();
             this->messageTCP += " joined ";
@@ -44,26 +45,23 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
         }
     }
 
-    // JOIN
+    // MSG
     else if(message->getMessageType() == Message::MessageType::MSG && users->userExistsByUniqueID(currentClientID)) {
         
         // Send
         this->messageTCP = "MSG FROM ";
         this->messageTCP += users->findUserByUniqueID(currentClientID)->getDisplayname();
-        this->messageTCP = " IS ";
-        this->messageTCP += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+        this->messageTCP += " IS ";
+        this->messageTCP += message->getMessageContent();
     }
 
     // BYE
     else if(message->getMessageType() == Message::MessageType::BYE && users->userExistsByUniqueID(currentClientID)) {
-        User *client = users->findUserByUniqueID(currentClientID);
-        relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
-        users->removeUser(client->getUsername()); 
-        this->messageTCP = "BYE.";
+        this->messageTCP = "";
     }
 
     else {
-        this->messageTCP = "REPLY NOK IS First you must log into account.";
+        this->messageTCP = "REPLY NOK IS Invalid command sent.";
     }
 
 

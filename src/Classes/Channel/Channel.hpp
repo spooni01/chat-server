@@ -30,7 +30,7 @@ private:
 	/**
 	 *  @brief	ID of channel.
 	 */
-	std::string channelID;
+	std::string channelID = "";
 
 public:
 

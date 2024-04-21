@@ -30,12 +30,12 @@ void ChannelFactory::addNewChannel(std::string newChannelID) {
 
 
 /**
- *  @brief	Remove channel from listOfChannels.
+ *  @brief	Remove channel from listOfChannels. Default channel (`default`) will be never deleted.
  *  @param  channelId ID of channel to remove.
  */
 void ChannelFactory::removeChannel(std::string channelId) {
 
-	if(channelId != "default") {
+	if(channelId != "default") { // Do not remove default channel
 		listOfChannels.erase(
 			std::remove_if(this->listOfChannels.begin(), this->listOfChannels.end(),
 			[channelId](const Channel& channel) {

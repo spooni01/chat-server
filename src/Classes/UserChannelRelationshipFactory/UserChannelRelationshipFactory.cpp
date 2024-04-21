@@ -60,13 +60,30 @@ bool UserChannelRelationshipFactory::relationshipExists(User* user, Channel* cha
 UserChannelRelationship* UserChannelRelationshipFactory::findRelationshipByUser(User* user) {
 
   	auto foundRelationship = std::find_if(listOfRelationships.begin(), listOfRelationships.end(),
-    	[user](UserChannelRelationship& relationship) {
-        	return relationship.getUser() == user;
-    });
+		[user](UserChannelRelationship& relationship) {
+			return relationship.getUser() == user;
+	});
 
   	if (foundRelationship != listOfRelationships.end()) 
-    	return &(*foundRelationship);
-	else 
-    	return nullptr;
+		return &(*foundRelationship);
+	else {
+		return nullptr;
+	}
 
+}
+
+
+/**
+ * @brief Get a list of Users for a specific channel ID 
+ * @param channelID The channel ID
+ * @return A vector containing User objects (empty if no users found)
+ */
+std::vector<User*> UserChannelRelationshipFactory::getUsersForChannel(Channel* channelID) {
+  std::vector<User*> users;
+  for (auto& relationship : listOfRelationships) {
+	if (relationship.getChannel() == channelID) {
+	  users.push_back(relationship.getUser());
+	}
+  }
+  return users;
 }

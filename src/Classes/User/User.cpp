@@ -126,7 +126,10 @@ std::string User::getUsername() const {
  */
 std::string User::getDisplayname() const {
 
-    return this->displayname;
+	if(!this->username.empty()) 
+    	return this->displayname;
+	else
+		return "";
 
 }
 

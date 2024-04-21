@@ -43,7 +43,7 @@ public:
 	/**
 	 *  @brief	Display name of user.
 	 */
-	std::string displayname;
+	std::string displayname = "";
 
 	/**
 	 *  @brief	State of user

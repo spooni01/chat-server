@@ -221,10 +221,13 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 					break;
 				}
 			}
+			if(currentClientID == -1)
+				exit(658);
 			
 			// Parse message
 			Message msg;
 			msg.parseTCP(receivedData);
+
 			if(msg.getMessageType() == Message::MessageType::JOIN && users->userExistsByUniqueID(currentClientID)) {
 				users->findUserByUniqueID(currentClientID)->displayname = msg.getDisplayName();
 			}
@@ -236,39 +239,85 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 			 *	RESPONSE
 			 */
 			std::string responseMessage;
-			responseMessage = requestProcessor.getMessageTCP();
+			responseMessage += requestProcessor.getMessageTCP();
 			responseMessage += "\r\n";
 
-			// Broadcast
-			if (msg.getMessageType() == Message::MessageType::MSG || msg.getMessageType() == Message::MessageType::JOIN) {
-		
-				// Iterate through all connected clients
-				for (const auto& client : connectedClients) {
-					// Send broadcast message only to clients with ID 1 and 2
-					// todo send just to people who are in the same channel
-					if (client.first == 1 || client.first == 2) {
-						int broadcastSocket = client.second;
-						int bytesSent = send(broadcastSocket, responseMessage.c_str(), responseMessage.length(), 0);
-						if (bytesSent == -1) {
-							std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
+			// Send to current client
+			if (msg.getMessageType() != Message::MessageType::MSG) {
+				
+				// Prepare and send response message
+				if (msg.getMessageType() != Message::MessageType::MSG) {
+					int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
+					if (bytesSent == -1) {
+					std::cerr << "Error sending data: " << strerror(errno) << std::endl;
+					}
+				}
+
+			}
+			// Send to broadcast
+			if(msg.getMessageType() ==  Message::MessageType::JOIN || msg.getMessageType() ==  Message::MessageType::BYE || msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::AUTH) {
+				
+				
+				// seg.fault je tu v ruadkU:
+				std::vector<User*> broadcastUsers = relationship->getUsersForChannel(channels->findChannel("default"));
+				// takze chyba je v tomto: `relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()`
+				// dalsi seqfault je v BYE senderi
+				//std::vector<User*> broadcastUsers = relationship->getUsersForChannel(relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel());
+				/*UserChannelRelationship *rel = relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID));
+				if(rel == nullptr) {
+					*rel = UserChannelRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel("default"));
+				}
+				std::vector<User*> broadcastUsers = relationship->getUsersForChannel(rel->getChannel());*/
+
+				
+				if(broadcastUsers.size() > 0) {
+					// Iterate through all connected clients
+					for (const auto& client : connectedClients) {
+
+						// If AUTH, change message
+						if(msg.getMessageType() == Message::MessageType::AUTH) {
+							responseMessage = "MSG FROM Server IS ";
+							responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
+							responseMessage += " joined ";
+							responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+							responseMessage += ".";
+							responseMessage += "\r\n";
+						}
+						else if(msg.getMessageType() == Message::MessageType::BYE) {
+							responseMessage = "MSG FROM Server IS ";
+							responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
+							responseMessage += " has left ";
+							responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+							responseMessage += ".";
+							responseMessage += "\r\n";
+						}
+
+						bool isBroadcastUser = std::any_of(broadcastUsers.begin(), broadcastUsers.end(),
+							[client](const User* user) { return user->getUniqueID() == client.first; });
+
+					
+						if (isBroadcastUser) {
+							if(responseMessage.empty() || (client.first == currentClientID && (msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::BYE))) {}
+							else {
+								int broadcastSocket = client.second;
+								int bytesSent = send(broadcastSocket, responseMessage.c_str(), responseMessage.length(), 0);
+								if (bytesSent == -1) {
+									std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
+								}
+							}
 						}
 					}
 				}
 			}
-
-			// Prepare and send response message
-			if (!responseMessage.empty() && msg.getMessageType() != Message::MessageType::MSG) {
-				int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
-				if (bytesSent == -1) {
-				std::cerr << "Error sending data: " << strerror(errno) << std::endl;
-				}
+			if (msg.getMessageType() == Message::MessageType::BYE) {
+				User *clientToRemove = users->findUserByUniqueID(currentClientID);
+				relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
+				users->removeUser(clientToRemove->getUsername()); 
+				connectedClients.erase(clientSocket);
+				close(clientSocket);
+				fds.erase(fds.begin() + i); // Remove from poll structure
 			}
 
-			if (msg.getMessageType() == Message::MessageType::BYE) {
-			  connectedClients.erase(clientSocket);
-			  close(clientSocket);
-			  fds.erase(fds.begin() + i); // Remove from poll structure
- 			}
 		  }
 		}
 	  }

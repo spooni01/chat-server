@@ -90,13 +90,13 @@ public:
 private:
 
 	MessageType messageType;  ///< The type of the message
-	std::string messageID;	///< Unique identifier for the message (optional)
-	std::string username;	///< Username associated with the message (optional)
-	std::string channelID;   ///< Channel ID associated with the message (optional)
-	std::string secret;	  ///< Secret key used for authentication (AUTH message only)
-	std::string displayName; ///< User's display name (optional)
-	std::string messageContent;///< Content of the message (optional)
-	std::string replyOKNOK;///< Store reply NOK / OK.
+	std::string messageID = "";	///< Unique identifier for the message (optional)
+	std::string username = "";	///< Username associated with the message (optional)
+	std::string channelID = "";   ///< Channel ID associated with the message (optional)
+	std::string secret = "";	  ///< Secret key used for authentication (AUTH message only)
+	std::string displayName = ""; ///< User's display name (optional)
+	std::string messageContent = "";///< Content of the message (optional)
+	std::string replyOKNOK = "";///< Store reply NOK / OK.
 
 };
 

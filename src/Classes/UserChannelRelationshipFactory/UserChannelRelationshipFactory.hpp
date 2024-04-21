@@ -65,6 +65,14 @@ public:
      */
     UserChannelRelationship* findRelationshipByUser(User* user);
 
+    /**
+	 * @brief Get a list of Users for a specific channel ID
+	 * 
+	 * @param channelID The channel ID
+	 * @return A vector containing User objects (empty if no users found)
+	 */
+	std::vector<User*> getUsersForChannel(Channel* channelID);
+
 };
 
 #endif // USERCHANNELRELATIONSHIPFACTORY_HPP
