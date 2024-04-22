@@ -132,6 +132,34 @@ Message::MessageType Message::getMessageType() const {
 
 }
 
+/**
+ * @return The message type in a string.
+ */
+std::string Message::getMessageTypeString() {
+
+    switch (this->messageType) {
+        case MessageType::INVALID:
+            return "INVALID";
+        case MessageType::ERR:
+            return "ERR";
+        case MessageType::REPLY:
+            return "REPLY";
+        case MessageType::AUTH:
+            return "AUTH";
+        case MessageType::JOIN:
+            return "JOIN";
+        case MessageType::MSG:
+            return "MSG";
+        case MessageType::BYE:
+            return "BYE";
+        case MessageType::CONFIRM:
+            return "CONFIRM"; 
+        default:
+            return "UNKNOWN";
+    }   
+
+}
+
 
 /**
  * @return The message ID.

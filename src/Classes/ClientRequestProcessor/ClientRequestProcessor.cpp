@@ -28,23 +28,23 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
 
     // JOIN
     else if(message->getMessageType() == Message::MessageType::JOIN && users->userExistsByUniqueID(currentClientID)) {
-        if(relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID() != message->getChannelID() || users->findUserByUniqueID(currentClientID)->getDisplayname() != message->getDisplayName()) {
-            relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
+        //if(relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID() != message->getChannelID() || users->findUserByUniqueID(currentClientID)->getDisplayname() != message->getDisplayName()) {
+            //relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
             
             // If channel do not exists, create it
-            if(!channels->channelExists(message->getChannelID()))
-                channels->addNewChannel(message->getChannelID());
+            //if(!channels->channelExists(message->getChannelID()))
+            //    channels->addNewChannel(message->getChannelID());
 
             // Make new relationship
-            relationship->addNewRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel(message->getChannelID()));
+            //relationship->addNewRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel(message->getChannelID()));
 
             // SendfindChannel
             this->messageTCP = "MSG FROM Server IS ";
             this->messageTCP += users->findUserByUniqueID(currentClientID)->getDisplayname();
             this->messageTCP += " joined ";
-            this->messageTCP += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+            this->messageTCP += message->getChannelID();
             this->messageTCP += ".";
-        }
+        //}
     }
 
     // MSG

@@ -82,6 +82,11 @@ public:
 	std::string getMessageContent() const;
 
 	/**
+	 * @return The message type in a string.
+	 */
+	std::string getMessageTypeString();
+
+	/**
 	 * @return The content of the replyOKNOK.
 	 */
 	std::string getReplyOKNOK() const;

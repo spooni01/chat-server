@@ -83,6 +83,9 @@ private:
 
 public:
 
+	// Stores current connection
+	struct sockaddr_storage clientAddrGlobal;
+
 	/**
 	 * @brief Constructor for this class.
 	 *

@@ -180,6 +180,7 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 			struct sockaddr_storage clientAddr;
 			socklen_t clientAddrSize = sizeof(clientAddr);
 			int clientSocket = accept(socketDescriptor_, (struct sockaddr*)&clientAddr, &clientAddrSize);
+			clientAddrGlobal = clientAddr;
 			if (clientSocket == -1) {
 				std::cerr << "Error accepting connection: " << strerror(errno) << std::endl;
 				throw NetworkException("Network problem.");
@@ -252,6 +253,21 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 						Message msg;
 						msg.parseTCP(receivedData);
 
+						// Write message
+						//RECV 127.0.0.1:51364 | AUTH
+						std::string msgType = "";
+						// Get IP address and port using getpeername
+						struct sockaddr_in* pAddr = (struct sockaddr_in*)&clientAddrGlobal;
+						std::string ipAddress = inet_ntoa(pAddr->sin_addr);
+						int port = ntohs(pAddr->sin_port);
+						std::string receivedDataWithoutNewLine = receivedData;
+						receivedDataWithoutNewLine.erase(std::remove(receivedDataWithoutNewLine.begin(), receivedDataWithoutNewLine.end(), '\n'), receivedDataWithoutNewLine.end());
+						std::cout << "RECV " << ipAddress << ":" << port << " | " << msg.getMessageTypeString() << receivedDataWithoutNewLine << std::endl;
+						std::cout.flush();
+
+
+
+
 						if(msg.getMessageType() == Message::MessageType::JOIN && users->userExistsByUniqueID(currentClientID)) {
 							users->findUserByUniqueID(currentClientID)->displayname = msg.getDisplayName();
 						}
@@ -278,6 +294,11 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 								std::cerr << "Error sending data: " << strerror(errno) << std::endl;
 							}
 
+							std::string responseDataWithoutNewLine = responseMessage;
+							responseDataWithoutNewLine.erase(std::remove(responseDataWithoutNewLine.begin(), responseDataWithoutNewLine.end(), '\n'), responseDataWithoutNewLine.end());
+							std::cout << "SENT " << ipAddress << ":" << port << " | " << "REPLY" << responseDataWithoutNewLine << std::endl;
+							std::cout.flush();
+
 							// Remove the processed message from the incomplete buffer
 							incompleteMessages[currentClientID].erase(0, newlinePos + 4);
 
@@ -286,14 +307,20 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 						}
 						else {
 							// Send to current client
-							if (msg.getMessageType() != Message::MessageType::MSG) {
-								
+							if (msg.getMessageType() != Message::MessageType::JOIN) {
+								if (msg.getMessageType() != Message::MessageType::BYE) {
 								// Prepare and send response message
 								if (msg.getMessageType() != Message::MessageType::MSG) {
 									int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
 									if (bytesSent == -1) {
-									std::cerr << "Error sending data: " << strerror(errno) << std::endl;
+										std::cerr << "Error sending data: " << strerror(errno) << std::endl;
 									}
+									std::string responseDataWithoutNewLine2 = responseMessage;
+									responseDataWithoutNewLine2.erase(std::remove(responseDataWithoutNewLine2.begin(), responseDataWithoutNewLine2.end(), '\n'), responseDataWithoutNewLine2.end());
+							
+									std::cout << "SENT " << ipAddress << ":" << port << " | " << "REPLY" << responseDataWithoutNewLine2 << std::endl;
+									std::cout.flush();
+								}
 								}
 
 							}
@@ -337,6 +364,11 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 												if (bytesSent == -1) {
 													std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
 												}
+												std::string responseDataWithoutNewLine3 = responseMessage;
+												responseDataWithoutNewLine3.erase(std::remove(responseDataWithoutNewLine3.begin(), responseDataWithoutNewLine3.end(), '\n'), responseDataWithoutNewLine3.end());
+							
+												std::cout << "SENT " << ipAddress << ":" << port << " | " << "REPLY" << responseDataWithoutNewLine3 << std::endl;
+												std::cout.flush();
 											}
 										}
 									}
