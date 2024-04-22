@@ -21,6 +21,9 @@ The main engine that controls what happens when is the ClientRequestProcessor cl
 TCP communication is designed using the poll() method. It stores connected clients in the variable `std::map<int, int> connectedClients`, thanks to which it can determine which client sent a new packet. In this method, there is also a variable `std::map<int, std::string> incompleteMessage` which is used to assemble incoming packets (if the message is divided into several packets, it will be combined in this variable. If there are more messages in one packet , so thanks to this variable, the first right is taken first, then the second, and so on).<br>
 After identifying the sender and obtaining the first complete message, the incoming message is parsed in the Message class. In the case of an incorrect format, `REPLY NOK FROM Server IS {error message}` is returned. If the parsing goes well, it goes to the ClientRequestProcessor class, where the given operation is performed according to the received message. After performing the operation, the server responds to the specific client according to the assignment. In the case of broadcast messages (e.g. a message from a user, a JOIN message,...) the TCPProtocolHandler class gets a list of clients that are in the same channel as the current user from the UserChannelRelationshipFactory class. Next, it performs a cycle in which it sends a response from the server in the form of a TCP packet to all acquired clients.
 
+### UDP Communication
+UDP communication is not implemented. It would also work using the poll() method and would have its own special class that would store incoming messages. They would be executed according to the serial number in which month they were executed. The list of both users and channels would be shared along with TCP communication. All this communication would take place only in the UDPProtocolHandler class (except for the class for storing incoming messages) and would be connected to existing classes (such as Messages, UserChannelRelationshipFactory, etc.)
+
 ### Skeleton Of Class Diagram
 This skeleton class diagram is intended for understanding object-oriented design, not for detailed technical documentation of class variables and methods.
 !["Skeleton Of Class Diagram"](doc/classdiagram.drawio.png)
@@ -39,7 +42,7 @@ Error codes and what they mean:
 ## Tests
 Unit testing is done using Google Test with separate test files for each class, promoting modularity and focused testing.  This approach simplifies maintenance and improves test organization.<br>
 In tests there is also class ClientClass that simulates client.<br>
-Test can be run using the `make test` command.
+Test can be run using the `make test` command. To ensure thorough testing, I utilized various tools and environments, including Wireshark on a Linux Ubuntu system and communication from personal computer with a chat server running on Merlin.
 
 ## License
 This project is licensed under the [GNU General Public License v3.0 (GPL-3.0)](https://www.gnu.org/licenses/gpl-3.0.html). See the [LICENSE](LICENSE) file for details.

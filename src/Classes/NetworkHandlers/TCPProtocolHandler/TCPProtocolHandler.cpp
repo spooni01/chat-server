@@ -319,8 +319,8 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 										else if(msg.getMessageType() == Message::MessageType::BYE) {
 											responseMessage = "MSG FROM Server IS ";
 											responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
-											responseMessage += " has left ";
-											responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+											responseMessage += " has left default";
+											//responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
 											responseMessage += ".";
 											responseMessage += "\r\n";
 										}
@@ -342,10 +342,7 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 									}
 								}
 							}
-							if (msg.getMessageType() == Message::MessageType::BYE) {
-								User *clientToRemove = users->findUserByUniqueID(currentClientID);
-								relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
-								users->removeUser(clientToRemove->getUsername()); 
+							if (msg.getMessageType() == Message::MessageType::BYE) {	
 								connectedClients.erase(clientSocket);
 								incompleteMessages[currentClientID] = "";
 								close(clientSocket);
