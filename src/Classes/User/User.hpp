@@ -54,7 +54,7 @@ public:
 	 *  @brief	Constructor for class.
 	 *	@param	channelID Unique ID of channel.
 	 */
-	User(std::string username, std::string displayname, std::string secret, int uniqueID = -1);
+	User(std::string username, std::string displayname, std::string secret, int uniqueID, std::string* globalErrMsg);
 
 	/**
 	*	@brief	Checks if username is correct.

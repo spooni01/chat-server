@@ -44,6 +44,12 @@ class TCPProtocolHandler {
 private:
 
 	/**
+	 * @brief Stores error message
+	 *
+	 */
+	std::string globalErrMsg = "";
+
+	/**
 	 * @brief The server address.
 	 *
 	 * This variable stores the IP address of this server.

@@ -13,15 +13,15 @@
  *	@param	displayname Display name of user.
  *	@param	secret Secret key of username
  */
-User::User(std::string username, std::string displayname, std::string secret, const int uniqueID) {
+User::User(std::string username, std::string displayname, std::string secret, const int uniqueID, std::string* globalErrMsg) {
 
     // Checks
     if(!isUsernameFormatCorrect(username))
-        throw UserException("Username has wrong syntax.");
+        *globalErrMsg = "Username has wrong syntax.";
     if(!isSecretFormatCorrect(secret))
-        throw UserException("Secret has wrong syntax.");
+        *globalErrMsg = "Secret has wrong syntax.";
     if(!isDisplaynameFormatCorrect(displayname)) 
-        throw UserException("Displayname has wrong syntax.");
+        *globalErrMsg = "Displayname has wrong syntax.";
 	
 	// Code to checks secret correction can go in this place
 

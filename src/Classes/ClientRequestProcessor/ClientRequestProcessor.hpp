@@ -29,7 +29,7 @@ private:
 	std::string messageTCP;
 public:
     
-	ClientRequestProcessor(Message *message, UserFactory *users, int currentClientID, UserChannelRelationshipFactory *relationship, ChannelFactory *channels);
+	ClientRequestProcessor(Message *message, UserFactory *users, int currentClientID, UserChannelRelationshipFactory *relationship, ChannelFactory *channels, std::string *globalErrMsg);
 	std::string getMessageTCP();
 };
 

@@ -14,7 +14,7 @@
 Channel::Channel(std::string channelID) {
 
     if(!this->isChannelIDFormatCorrect(channelID))
-        throw ChannelException("ChannelID is incorrect.");
+        std::string globalErrMsg = "ChannelID is incorrect.";
     
     this->channelID = channelID;
 

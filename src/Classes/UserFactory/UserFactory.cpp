@@ -15,9 +15,9 @@
  *	@param	displayname Display name of user.
  *	@param	secret Secret key of username.
 */
-void UserFactory::addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID) {
+void UserFactory::addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID, std::string* globalErrMsg) {
 
-	listOfUsers.push_back(User(username, displayname, secret, currentClientID));
+	listOfUsers.push_back(User(username, displayname, secret, currentClientID, globalErrMsg));
 
 }
 

@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <vector>
+#include <string>
 #include <poll.h>
 #include <csignal>
 
@@ -37,3 +38,4 @@
 #include "Classes/UserChannelRelationshipFactory/UserChannelRelationshipFactory.cpp"
 #include "Classes/NetworkHandlers/TCPProtocolHandler/TCPProtocolHandler.cpp"
 #include "Classes/NetworkHandlers/UDPProtocolHandler/UDPProtocolHandler.cpp"
+

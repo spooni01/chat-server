@@ -43,7 +43,7 @@ public:
 	 *	@param	displayname Display name of user.
 	 *	@param	secret Secret key of username.
 	*/
-	void addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID);
+	void addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID, std::string* globalErrMsg);
 
 	/**
 	 *  @brief	Destructor.

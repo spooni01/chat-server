@@ -257,7 +257,7 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 						}
 
 						// Process what user wants
-						ClientRequestProcessor requestProcessor(&msg, users, currentClientID, relationship, channels);
+						ClientRequestProcessor requestProcessor(&msg, users, currentClientID, relationship, channels, &this->globalErrMsg);
 
 						/**
 						 *	RESPONSE
@@ -266,78 +266,98 @@ bool TCPProtocolHandler::listenForSockets(UserFactory *users, UserChannelRelatio
 						responseMessage += requestProcessor.getMessageTCP();
 						responseMessage += "\r\n";
 
-						// Send to current client
-						if (msg.getMessageType() != Message::MessageType::MSG) {
-							
-							// Prepare and send response message
-							if (msg.getMessageType() != Message::MessageType::MSG) {
-								int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
-								if (bytesSent == -1) {
+						// If there is error, return it
+						if(globalErrMsg != "") {
+							responseMessage = "REPLY NOK FROM Server IS ";
+							responseMessage += globalErrMsg;
+							responseMessage += "\r\n";
+							globalErrMsg = "";
+
+							int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
+							if (bytesSent == -1) {
 								std::cerr << "Error sending data: " << strerror(errno) << std::endl;
-								}
 							}
 
+							// Remove the processed message from the incomplete buffer
+							incompleteMessages[currentClientID].erase(0, newlinePos + 4);
+
+							// Set new line pos
+							newlinePos = incompleteMessages[currentClientID].find("\\r\\n");
 						}
-						// Send to broadcast
-						if(msg.getMessageType() ==  Message::MessageType::JOIN || msg.getMessageType() ==  Message::MessageType::BYE || msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::AUTH) {
-							
-							std::vector<User*> broadcastUsers = relationship->getUsersForChannel(channels->findChannel("default"));
-							//std::vector<User*> broadcastUsers = relationship->getUsersForChannel(relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel());
-
-							if(broadcastUsers.size() > 0) {
-								// Iterate through all connected clients
-								for (const auto& client : connectedClients) {
-
-									// If AUTH, change message
-									if(msg.getMessageType() == Message::MessageType::AUTH) {
-										responseMessage = "MSG FROM Server IS ";
-										responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
-										responseMessage += " joined ";
-										responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
-										responseMessage += ".";
-										responseMessage += "\r\n";
-									}
-									else if(msg.getMessageType() == Message::MessageType::BYE) {
-										responseMessage = "MSG FROM Server IS ";
-										responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
-										responseMessage += " has left ";
-										responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
-										responseMessage += ".";
-										responseMessage += "\r\n";
-									}
-
-									bool isBroadcastUser = std::any_of(broadcastUsers.begin(), broadcastUsers.end(),
-										[client](const User* user) { return user->getUniqueID() == client.first; });
-
+						else {
+							// Send to current client
+							if (msg.getMessageType() != Message::MessageType::MSG) {
 								
-									if (isBroadcastUser) {
-										if(responseMessage.empty() || (client.first == currentClientID && (msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::BYE))) {}
-										else {
-											int broadcastSocket = client.second;
-											int bytesSent = send(broadcastSocket, responseMessage.c_str(), responseMessage.length(), 0);
-											if (bytesSent == -1) {
-												std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
+								// Prepare and send response message
+								if (msg.getMessageType() != Message::MessageType::MSG) {
+									int bytesSent = send(clientSocket, responseMessage.c_str(), responseMessage.length(), 0);
+									if (bytesSent == -1) {
+									std::cerr << "Error sending data: " << strerror(errno) << std::endl;
+									}
+								}
+
+							}
+							// Send to broadcast
+							if(msg.getMessageType() ==  Message::MessageType::JOIN || msg.getMessageType() ==  Message::MessageType::BYE || msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::AUTH) {
+								
+								std::vector<User*> broadcastUsers = relationship->getUsersForChannel(channels->findChannel("default"));
+								//std::vector<User*> broadcastUsers = relationship->getUsersForChannel(relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel());
+
+								if(broadcastUsers.size() > 0) {
+									// Iterate through all connected clients
+									for (const auto& client : connectedClients) {
+
+										// If AUTH, change message
+										if(msg.getMessageType() == Message::MessageType::AUTH) {
+											responseMessage = "MSG FROM Server IS ";
+											responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
+											responseMessage += " joined ";
+											responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+											responseMessage += ".";
+											responseMessage += "\r\n";
+										}
+										else if(msg.getMessageType() == Message::MessageType::BYE) {
+											responseMessage = "MSG FROM Server IS ";
+											responseMessage += users->findUserByUniqueID(currentClientID)->getDisplayname();
+											responseMessage += " has left ";
+											responseMessage += relationship->findRelationshipByUser(users->findUserByUniqueID(currentClientID))->getChannel()->getChannelID();
+											responseMessage += ".";
+											responseMessage += "\r\n";
+										}
+
+										bool isBroadcastUser = std::any_of(broadcastUsers.begin(), broadcastUsers.end(),
+											[client](const User* user) { return user->getUniqueID() == client.first; });
+
+									
+										if (isBroadcastUser) {
+											if(responseMessage.empty() || (client.first == currentClientID && (msg.getMessageType() ==  Message::MessageType::MSG || msg.getMessageType() ==  Message::MessageType::BYE))) {}
+											else {
+												int broadcastSocket = client.second;
+												int bytesSent = send(broadcastSocket, responseMessage.c_str(), responseMessage.length(), 0);
+												if (bytesSent == -1) {
+													std::cerr << "Error sending broadcast message: " << strerror(errno) << std::endl;
+												}
 											}
 										}
 									}
 								}
 							}
-						}
-						if (msg.getMessageType() == Message::MessageType::BYE) {
-							User *clientToRemove = users->findUserByUniqueID(currentClientID);
-							relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
-							users->removeUser(clientToRemove->getUsername()); 
-							connectedClients.erase(clientSocket);
-							incompleteMessages[currentClientID] = "";
-							close(clientSocket);
-							fds.erase(fds.begin() + i); // Remove from poll structure
-						}
+							if (msg.getMessageType() == Message::MessageType::BYE) {
+								User *clientToRemove = users->findUserByUniqueID(currentClientID);
+								relationship->removeRelationshipByUser(users->findUserByUniqueID(currentClientID));
+								users->removeUser(clientToRemove->getUsername()); 
+								connectedClients.erase(clientSocket);
+								incompleteMessages[currentClientID] = "";
+								close(clientSocket);
+								fds.erase(fds.begin() + i); // Remove from poll structure
+							}
 
-						// Remove the processed message from the incomplete buffer
-						incompleteMessages[currentClientID].erase(0, newlinePos + 4);
+							// Remove the processed message from the incomplete buffer
+							incompleteMessages[currentClientID].erase(0, newlinePos + 4);
 
-						// Set new line pos
-						newlinePos = incompleteMessages[currentClientID].find("\\r\\n");
+							// Set new line pos
+							newlinePos = incompleteMessages[currentClientID].find("\\r\\n");
+						}
 
 					}
 				}

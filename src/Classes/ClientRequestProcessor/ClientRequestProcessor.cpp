@@ -1,6 +1,6 @@
 #include "ClientRequestProcessor.hpp"
 
-ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *users, int currentClientID, UserChannelRelationshipFactory *relationship, ChannelFactory *channels) {
+ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *users, int currentClientID, UserChannelRelationshipFactory *relationship, ChannelFactory *channels, std::string* globalErrMsg) {
 
 
     // AUTH
@@ -16,10 +16,12 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
         }
         else {
             // user do not exists yet 
-            users->addNewUser(message->getUsername(), message->getDisplayName(), message->getSecret(), currentClientID);
-            users->findUserByUniqueID(currentClientID)->state.transitionToOpen();
-            relationship->addNewRelationship(users->findUser(message->getUsername()), channels->findChannel("default"));
-            this->messageTCP = "REPLY OK IS Auth success.";
+            users->addNewUser(message->getUsername(), message->getDisplayName(), message->getSecret(), currentClientID, globalErrMsg);
+            if(*globalErrMsg == "") {
+                users->findUserByUniqueID(currentClientID)->state.transitionToOpen();
+                relationship->addNewRelationship(users->findUser(message->getUsername()), channels->findChannel("default"));
+                this->messageTCP = "REPLY OK IS Auth success.";
+            }
 
         }
     }
