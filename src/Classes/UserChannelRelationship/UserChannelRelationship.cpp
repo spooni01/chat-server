@@ -34,7 +34,7 @@ void UserChannelRelationship::setChannel(Channel* newChannel) {
  *  @brief	Get channel by user.
  *  @return Pointer to channel.
  */
-Channel* UserChannelRelationship::getChannel() {
+Channel* UserChannelRelationship::getChannel() const {
 
     return this->channel;
 

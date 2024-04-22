@@ -28,14 +28,12 @@
  *  This class creates and handles relationships beetwen user and channel
  */
 class UserChannelRelationshipFactory {
-private:
+public:
 
 	/**
 	 *  @brief	List of current relationships.
 	 */
     std::vector<UserChannelRelationship> listOfRelationships;
-
-public:
 
     /**
  	 *  @brief	Add relationship to listOfRelationships.

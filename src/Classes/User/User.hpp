@@ -31,12 +31,12 @@ private:
 	/**
 	 *  @brief	Username of user.
 	 */
-	std::string username;
+	std::string username = "";
 
 	/**
 	 *  @brief	Get unique ID.
 	 */
-	int uniqueID;
+	int uniqueID = -1;
 
 public:
 
@@ -96,6 +96,12 @@ public:
 	 *  @return unique ID.
 	 */
 	int getUniqueID() const;
+
+	/**
+	 *  @brief	Returns unique ID. It is used for communication.
+	 *  @return unique ID.
+	 */
+	int getUniqueIDNonConst();
 
 };
 

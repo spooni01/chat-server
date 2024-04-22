@@ -17,8 +17,17 @@
 */
 void UserFactory::addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID) {
 
-	User tmp(username, displayname, secret, currentClientID);
-	this->listOfUsers.push_back(tmp);
+	listOfUsers.push_back(User(username, displayname, secret, currentClientID));
+
+}
+
+
+/**
+ *  @brief	Destructor.
+ */
+UserFactory::~UserFactory() {
+	
+  	listOfUsers.clear();
 
 }
 

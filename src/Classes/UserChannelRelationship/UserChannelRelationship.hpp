@@ -57,7 +57,7 @@ public:
  	 *  @brief	Get pointer to channel.
      *  @return Pointer to channel.
      */
-	Channel* getChannel();
+	Channel* getChannel() const;
 
     /**
  	 *  @brief	Get pointer to user.

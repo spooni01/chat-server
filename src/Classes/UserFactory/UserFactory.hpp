@@ -46,6 +46,11 @@ public:
 	void addNewUser(std::string username, std::string displayname, std::string secret, int currentClientID);
 
 	/**
+	 *  @brief	Destructor.
+	 */
+	~UserFactory();
+
+	/**
  	 *  @brief	Remove channel from listOfUsers
 	 *  @param  username Unique username of user to remove.
 	 */

@@ -15,7 +15,12 @@
  */
 void UserChannelRelationshipFactory::addNewRelationship(User* user, Channel* channelID) {
 
-	this->listOfRelationships.push_back(UserChannelRelationship(user, channelID));
+	User *tmpUser = user;
+	Channel *tmpChannel = channelID;
+
+
+	UserChannelRelationship tmp(tmpUser, tmpChannel);
+	this->listOfRelationships.push_back(tmp);
 
 }
 
@@ -67,6 +72,7 @@ UserChannelRelationship* UserChannelRelationshipFactory::findRelationshipByUser(
   	if (foundRelationship != listOfRelationships.end()) 
 		return &(*foundRelationship);
 	else {
+		exit(222);
 		return nullptr;
 	}
 
@@ -81,7 +87,7 @@ UserChannelRelationship* UserChannelRelationshipFactory::findRelationshipByUser(
 std::vector<User*> UserChannelRelationshipFactory::getUsersForChannel(Channel* channelID) {
   std::vector<User*> users;
   for (auto& relationship : listOfRelationships) {
-	if (relationship.getChannel() == channelID) {
+	if (relationship.getChannel()->getChannelID() == channelID->getChannelID()) {
 	  users.push_back(relationship.getUser());
 	}
   }

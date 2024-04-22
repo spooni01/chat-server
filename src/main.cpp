@@ -43,6 +43,12 @@ int main(int argc, char* argv[])
 	} catch (const NetworkException &e) {
 		std::cerr << ANSI_COLOR_RED << "Exception caught: " << e.what() << ANSI_COLOR_RESET << std::endl;
 		return 40;
+	} catch (const std::length_error &e) {
+		std::cerr << ANSI_COLOR_RED << "Exception creationg string: " << e.what() << ANSI_COLOR_RESET << std::endl;
+		return 50;
+	} catch (const std::bad_alloc &e) {
+		std::cerr << ANSI_COLOR_RED << "Exception bad allocation: " << e.what() << ANSI_COLOR_RESET << std::endl;
+		return 51;
 	}
 
 	return 0;

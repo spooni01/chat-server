@@ -18,7 +18,7 @@ ClientRequestProcessor::ClientRequestProcessor(Message *message, UserFactory *us
             // user do not exists yet 
             users->addNewUser(message->getUsername(), message->getDisplayName(), message->getSecret(), currentClientID);
             users->findUserByUniqueID(currentClientID)->state.transitionToOpen();
-            relationship->addNewRelationship(users->findUserByUniqueID(currentClientID), channels->findChannel("default"));
+            relationship->addNewRelationship(users->findUser(message->getUsername()), channels->findChannel("default"));
             this->messageTCP = "REPLY OK IS Auth success.";
 
         }

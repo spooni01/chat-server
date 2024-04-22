@@ -16,6 +16,7 @@
 #include <vector>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <algorithm>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <poll.h>
